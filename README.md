@@ -45,6 +45,6 @@ If you'd like to view a detailed HTML report of your test runs locally, you can 
 npm install -g newman-reporter-htmlextra
 
 # Run tests and generate the report
-npx newman run tests/jsonplaceholder_collection.json -e tests/Dev.postman_environment.json -r htmlextra,cli
+npm run test
 ```
 *This will create a `newman` folder in your project directory containing a stylish HTML report of the test results.*
