@@ -1,50 +1,49 @@
-# JSONPlaceholder API Testing Project
+# REST API Automation Framework
 
-This repository contains automated API tests for the [JSONPlaceholder](https://jsonplaceholder.typicode.com/) mock API. The tests are written using **Postman** and can be executed via the command line using **Newman**.
+This repository contains an automated end-to-end REST API testing framework for the [JSONPlaceholder](https://jsonplaceholder.typicode.com/) API. The test scripts are designed in **Postman** and executed headlessly via the command line using **Newman**.
 
-It includes a full suite of CRUD operations (GET, POST, PUT, PATCH, DELETE) to validate the behavior of the `/posts` endpoints. 
+It includes a full suite of CRUD operations (GET, POST, PUT, PATCH, DELETE) to validate the behavior of the `/posts` endpoints.
+
+## 🎯 Key Features
+
+- **Automated Assertions:** JavaScript test scripts validate HTTP status codes (200 OK, 201 Created), API performance metrics (response times), and payload formatting.
+- **JSON Schema Validation:** Strictly enforces the expected data types and structural contract of the API response payloads.
+- **CI/CD Integration:** A fully automated GitHub Actions pipeline that executes the Newman test suite on every code push.
+- **Interactive Reporting:** Automatically generates and uploads rich, interactive HTML reports (`htmlextra`) as pipeline artifacts for easy stakeholder review.
 
 ## 📁 Project Structure
 
 ```text
 .
-└── tests/
-    ├── jsonplaceholder_collection.json  # The Postman collection containing all requests and test scripts
-    └── Dev.postman_environment.json     # The Postman environment variables (e.g., base URLs)
+├── .github/workflows/
+│   └── api-tests.yml                    # GitHub Actions CI/CD pipeline configuration
+├── tests/
+│   ├── jsonplaceholder_collection.json  # Postman collection (Endpoints + JavaScript Assertions)
+│   └── Dev.postman_environment.json     # Postman environment variables (Base URLs)
+└── package.json                         # Project dependencies and Newman run scripts
 ```
 
-## 🚀 Prerequisites
+## 🚀 Running Tests Locally
 
-To run these tests locally, you will need:
-- [Node.js](https://nodejs.org/) (which includes `npm` or `npx`)
+To run these tests locally and generate an interactive HTML report, you just need [Node.js](https://nodejs.org/) installed on your machine.
 
-## 💻 Running Tests Locally
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-You can run the tests directly from your terminal using `npx` (which will temporarily download and run Newman without needing a global installation):
-
-```bash
-# Run tests using Newman
-npx newman run tests/jsonplaceholder_collection.json -e tests/Dev.postman_environment.json
-```
+2. **Execute the test suite:**
+   ```bash
+   npm run test
+   ```
 
 **Expected Output:**
-You should see a CLI output detailing the execution of the requests, their status codes, and test assertions (e.g., Response time checks, JSON validation).
+Newman will execute the test suite, print a summary in your terminal window, and automatically generate a beautiful HTML report inside a newly created `newman` folder in your project directory. 
 
-## 🔄 CI/CD Integration
+## 🔄 CI/CD Pipeline
 
-This project is integrated with continuous integration/continuous deployment (CI/CD) pipelines (e.g., GitHub Actions). The pipeline is configured to automatically run the Newman test suite on every push or pull request to the `main` branch. 
-
-This ensures that any changes to the API or the test suite itself are constantly validated, maintaining the integrity of our endpoints.
-
-## 📊 Generating HTML Reports (Optional)
-
-If you'd like to view a detailed HTML report of your test runs locally, you can use the `newman-reporter-htmlextra` package:
-
-```bash
-# Install the HTML reporter
-npm install -g newman-reporter-htmlextra
-
-# Run tests and generate the report
-npm run test
-```
-*This will create a `newman` folder in your project directory containing a stylish HTML report of the test results.*
+This project utilizes **GitHub Actions** for continuous integration. Upon every push to the `main` branch, the pipeline automatically:
+1. Provisions an Ubuntu runner and sets up Node.js.
+2. Installs dependencies cleanly (`npm ci`).
+3. Executes the Newman test suite.
+4. Generates the `htmlextra` report and securely uploads it as a downloadable **Artifact** attached to the GitHub Action run.
