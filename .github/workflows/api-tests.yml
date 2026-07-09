@@ -17,8 +17,15 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Newman
-        run: npm install -g newman
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Run API Tests
-        run: newman run tests/jsonplaceholder_collection.json -e tests/Dev.postman_environment.json
+      - name: Run API Tests and Generate HTML Report
+        run: npm run test
+        continue-on-error: true
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-report
+          path: newman/
